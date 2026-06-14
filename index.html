@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow Pro</title>
+    <link rel="icon" type="image/png" href="taskflow-logo.png">
+
+
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+<!-- Chart JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Custom CSS -->
+<link rel="stylesheet" href="style.css">
+
+
+</head>
+
+<body>
+
+<div class="app-container">
+
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+
+    <div class="logo-section text-center">
+
+    <img
+        src="taskflow-logo.png"
+        alt="TaskFlow Pro Logo"
+        class="app-logo">
+
+    <h3>TaskFlow Pro</h3>
+
+    <p>Productivity Dashboard</p>
+
+</div>
+
+    <ul class="sidebar-menu">
+
+        <li>
+            <a href="#" class="nav-link active" data-page="dashboard">
+                <i class="bi bi-grid-fill"></i>
+                Dashboard
+            </a>
+        </li>
+
+        <li>
+            <a href="#" class="nav-link" data-page="tasks">
+                <i class="bi bi-check2-square"></i>
+                Tasks
+            </a>
+        </li>
+
+        <li>
+            <a href="#" class="nav-link" data-page="goals">
+                <i class="bi bi-bullseye"></i>
+                Goals
+            </a>
+        </li>
+
+        <li>
+            <a href="#" class="nav-link" data-page="analytics">
+                <i class="bi bi-graph-up-arrow"></i>
+                Analytics
+            </a>
+        </li>
+
+    </ul>
+
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main-content">
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+
+        <div>
+            <h2 id="pageTitle">Dashboard</h2>
+        </div>
+
+        <div>
+            <button
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#taskModal">
+
+                <i class="bi bi-plus-circle"></i>
+                Add Task
+
+            </button>
+        </div>
+
+    </div>
+
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="page active-page">
+
+        <div class="row g-4">
+
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <h6>Total Tasks</h6>
+                    <h2 id="totalTasks">0</h2>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <h6>Completed</h6>
+                    <h2 id="completedTasks">0</h2>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <h6>Pending</h6>
+                    <h2 id="pendingTasks">0</h2>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <h6>Goal Progress</h6>
+                    <h2 id="goalProgress">0%</h2>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card dashboard-card mt-4">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Task Completion Progress</span>
+                    <span id="progressPercent">0%</span>
+                </div>
+
+                <div class="progress dashboard-progress">
+
+                    <div
+                        class="progress-bar"
+                        id="mainProgressBar"
+                        style="width:0%">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="card dashboard-card mt-4">
+
+            <div class="card-header">
+                Recent Tasks
+            </div>
+
+            <div class="card-body">
+
+                <div id="recentTasks">
+
+                    <p class="empty-text">
+                        No tasks created yet.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- TASKS PAGE -->
+    <section id="tasks" class="page">
+
+        <div class="card dashboard-card">
+
+            <div class="card-body">
+
+                <div class="row mb-4">
+
+                    <div class="col-md-6">
+
+                        <input
+                            type="text"
+                            id="taskSearch"
+                            class="form-control"
+                            placeholder="Search tasks...">
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <select
+                            id="taskFilter"
+                            class="form-select">
+
+                            <option value="all">All</option>
+                            <option value="completed">Completed</option>
+                            <option value="pending">Pending</option>
+                            <option value="high">High Priority</option>
+                            <option value="medium">Medium Priority</option>
+                            <option value="low">Low Priority</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <div id="taskList">
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- GOALS PAGE -->
+    <section id="goals" class="page">
+
+        <div class="d-flex justify-content-between mb-4">
+
+            <h4>Your Goals</h4>
+
+            <button
+                class="btn btn-success"
+                data-bs-toggle="modal"
+                data-bs-target="#goalModal">
+
+                <i class="bi bi-plus-circle"></i>
+                Add Goal
+
+            </button>
+
+        </div>
+
+        <div id="goalList">
+
+        </div>
+
+    </section>
+
+    <!-- ANALYTICS PAGE -->
+    <section id="analytics" class="page">
+
+        <div class="row g-4">
+
+            <div class="col-lg-6">
+
+                <div class="card dashboard-card">
+
+                    <div class="card-header">
+                        Task Completion
+                    </div>
+
+                    <div class="card-body">
+
+                        <canvas id="taskChart"></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-6">
+
+                <div class="card dashboard-card">
+
+                    <div class="card-header">
+                        Priority Distribution
+                    </div>
+
+                    <div class="card-body">
+
+                        <canvas id="priorityChart"></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row g-4 mt-2">
+
+            <div class="col-12">
+
+                <div class="card dashboard-card">
+
+                    <div class="card-header">
+                        Analytics Summary
+                    </div>
+
+                    <div class="card-body">
+
+                        <div id="analyticsSummary">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+</div>
+
+<!-- TASK MODAL -->
+
+<div class="modal fade" id="taskModal">
+
+```
+<div class="modal-dialog">
+
+    <div class="modal-content custom-modal">
+
+        <div class="modal-header">
+
+            <h5>Add Task</h5>
+
+            <button
+                type="button"
+                class="btn-close btn-close-white"
+                data-bs-dismiss="modal">
+            </button>
+
+        </div>
+
+        <div class="modal-body">
+
+            <input
+                type="text"
+                id="taskTitle"
+                class="form-control mb-3"
+                placeholder="Task Title">
+
+            <textarea
+                id="taskDescription"
+                class="form-control mb-3"
+                rows="3"
+                placeholder="Task Description">
+            </textarea>
+
+            <input
+    type="date"
+    id="taskDate"
+    class="form-control mb-3">
+
+<div class="row mb-3">
+
+    <div class="col-md-6">
+        <label class="mb-1">Start Time</label>
+
+        <input
+            type="time"
+            id="taskStartTime"
+            class="form-control">
+    </div>
+
+    <div class="col-md-6">
+        <label class="mb-1">End Time</label>
+
+        <input
+            type="time"
+            id="taskEndTime"
+            class="form-control">
+    </div>
+
+</div>      
+
+            <select
+                id="taskPriority"
+                class="form-select mb-3">
+
+                <option value="High">High Priority</option>
+                <option value="Medium">Medium Priority</option>
+                <option value="Low">Low Priority</option>
+
+            </select>
+
+            <button
+                id="saveTask"
+                class="btn btn-primary w-100">
+
+                Save Task
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+<!-- GOAL MODAL -->
+
+<div class="modal fade" id="goalModal">
+
+```
+<div class="modal-dialog">
+
+    <div class="modal-content custom-modal">
+
+        <div class="modal-header">
+
+            <h5>Add Goal</h5>
+
+            <button
+                type="button"
+                class="btn-close btn-close-white"
+                data-bs-dismiss="modal">
+            </button>
+
+        </div>
+
+        <div class="modal-body">
+
+            <input
+                type="text"
+                id="goalName"
+                class="form-control mb-3"
+                placeholder="Goal Name">
+
+            <input
+                type="number"
+                id="goalTarget"
+                class="form-control mb-3"
+                placeholder="Target Percentage">
+
+            <button
+                id="saveGoal"
+                class="btn btn-success w-100">
+
+                Save Goal
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+<!-- Bootstrap -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- App -->
+
+<script src="script.js"></script>
+
+</body>
+</html>
